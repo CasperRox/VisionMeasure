@@ -63,12 +63,17 @@ def blobDistance(imgSrc):
     # filtering the list of contours according to contour area
     if len(cntsPre) > 0:
         for i in range(0,len(cntsPre)):
-            print ("AreaPre : ", cv2.contourArea(cntsPre[i]))
+            # print ("AreaPre : ", cv2.contourArea(cntsPre[i]))
             if 0 <= cv2.contourArea(cntsPre[i]) <= 80 :
                 cnts.append(cntsPre[i])
 
     cnts = sorted(cnts, key = cv2.contourArea, reverse = True)[:2]
     center = [(0,0),(0,0)]
+
+    # Draw a rectangle on the image frame
+    imgTemp = imgOrig.copy()
+    cv2.rectangle(imgTemp,(0,0),(imgTemp.shape[1],100),(0,0,0),-1)
+    cv2.addWeighted(imgTemp,0.5,imgOrig,0.5,0,imgOrig)
 
     # only proceed if two contours were found
     if len(cnts) > 1:
@@ -89,11 +94,8 @@ def blobDistance(imgSrc):
         	qSum -= q.get()
 
 	        # show distance value on image frame
-	        imgTemp = imgOrig.copy()
-	        cv2.rectangle(imgTemp,(0,0),(imgTemp.shape[1],100),(0,0,0),-1)
-	        cv2.addWeighted(imgTemp,0.5,imgOrig,0.5,0,imgOrig)
 	        font = cv2.FONT_HERSHEY_SCRIPT_COMPLEX
-	##        cv2.putText(imgOrig, '%d mm' %getmmDistance(distance), (10,80), font, 3, (0,0,255), 7, cv2.LINE_AA)
+	        # cv2.putText(imgOrig, '%d mm' %getmmDistance(distance), (10,80), font, 3, (0,0,255), 7, cv2.LINE_AA)
 	        cv2.putText(imgOrig, '%.1f cm' %(getmmDistance(qAvg)/10), (10,80), font, 3, (0,0,255), 7, cv2.LINE_AA)
 
 	        print ("Pixel Distance : ", qAvg)
@@ -104,7 +106,7 @@ def blobDistance(imgSrc):
 
     imgOrig = cv2.resize(imgOrig, (1350,730))
     cv2.imshow("Detected", imgOrig)
-    cv2.imshow("Filtered", mask)
+    # cv2.imshow("Filtered", mask)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Main Process ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
