@@ -45,6 +45,7 @@ def getmmDistance(pixel):
         return 0
 
 def blobDistance(imgSrc):
+    global upperBoundary, lowerBoundary
     global q, qSum
     imgOrig = imgSrc
     blurred = cv2.GaussianBlur(imgSrc, (11, 11), 0)
