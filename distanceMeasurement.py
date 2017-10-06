@@ -88,18 +88,18 @@ def blobDistance(imgSrc):
         distance = math.sqrt(math.pow((center[0][1]-center[1][1]),2) + math.pow((center[0][0]-center[1][0]),2))
 
         if q.qsize() >= 5:
-        	qAvg = qSum / q.qsize()
-        	# print ("Sum : ", qSum)
-        	# print ("Avg : ", qAvg)
-        	qSum -= q.get()
+            qAvg = qSum / q.qsize()
+            # print ("Sum : ", qSum)
+            # print ("Avg : ", qAvg)
+            qSum -= q.get()
 
-	        # show distance value on image frame
-	        font = cv2.FONT_HERSHEY_SCRIPT_COMPLEX
-	        # cv2.putText(imgOrig, '%d mm' %getmmDistance(distance), (10,80), font, 3, (0,0,255), 7, cv2.LINE_AA)
-	        cv2.putText(imgOrig, '%.1f cm' %(getmmDistance(qAvg)/10), (10,80), font, 3, (0,0,255), 7, cv2.LINE_AA)
+            # show distance value on image frame
+            font = cv2.FONT_HERSHEY_SCRIPT_COMPLEX
+            # cv2.putText(imgOrig, '%d mm' %getmmDistance(distance), (10,80), font, 3, (0,0,255), 7, cv2.LINE_AA)
+            cv2.putText(imgOrig, '%.1f cm' %(getmmDistance(qAvg)/10), (10,80), font, 3, (0,0,255), 7, cv2.LINE_AA)
 
-	        print ("Pixel Distance : ", qAvg)
-	        print ("mm Distance : ", "%.2f" %getmmDistance(qAvg))
+            print ("Pixel Distance : ", qAvg)
+            print ("mm Distance : ", "%.2f" %getmmDistance(qAvg))
 
         qSum += distance
         q.put(distance)
