@@ -14,7 +14,7 @@ qSum = 0
 
 def chooseColor():
     global upperBoundary, lowerBoundary
-    print ("\n\nColor Presets :\n1 Red\n2 Green\n3 Blue\n4 Testing\n")
+    print ("\n\nColor Presets :\n1 Red\n2 Green\n3 Blue\n4 Yellow\n")
     color = input("Please enter index of the measuring tool color : ")
     # define color filter
     # red mask
@@ -29,16 +29,16 @@ def chooseColor():
     elif "3"==color:
         upperBoundary = (125, 240, 200)
         lowerBoundary = (110, 200, 100)
-    # testing mask
+    # yellow mask
     elif "4"==color:
-        upperBoundary = (160, 200, 255)
-        lowerBoundary = (130, 100, 50)
+        upperBoundary = (35, 180, 255)
+        lowerBoundary = (20, 80, 180)
     else:
         print ("\n*** Wrong color index selected")
         sys.exit(0)
 
 def getmmDistance(pixel):
-    temp = (pixel - 19.429) / 0.9739
+    temp = (pixel - 23.051) / 0.9753
     if temp > 0:
         return temp
     else:
@@ -63,8 +63,8 @@ def blobDistance(imgSrc):
     # filtering the list of contours according to contour area
     if len(cntsPre) > 0:
         for i in range(0,len(cntsPre)):
-            # print ("AreaPre : ", cv2.contourArea(cntsPre[i]))
-            if 0 <= cv2.contourArea(cntsPre[i]) <= 80 :
+            print ("AreaPre : ", cv2.contourArea(cntsPre[i]))
+            if 20 <= cv2.contourArea(cntsPre[i]) <= 100 :
                 cnts.append(cntsPre[i])
 
     cnts = sorted(cnts, key = cv2.contourArea, reverse = True)[:2]
@@ -106,7 +106,7 @@ def blobDistance(imgSrc):
 
     imgOrig = cv2.resize(imgOrig, (1350,730))
     cv2.imshow("Detected", imgOrig)
-    # cv2.imshow("Filtered", mask)
+    cv2.imshow("Filtered", mask)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Main Process ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
