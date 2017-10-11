@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface>
+  <object class="tk.Toplevel" id="Toplevel_1">
+    <property name="background">#d6d6d6</property>
+    <property name="borderwidth">20</property>
+    <property name="height">400</property>
+    <property name="minsize">800|400</property>
+    <property name="padx">0</property>
+    <property name="relief">flat</property>
+    <property name="resizable">both</property>
+    <property name="takefocus">false</property>
+    <property name="title" translatable="yes">Vision Based Garment Measuring System</property>
+    <property name="width">800</property>
+    <child>
+      <object class="ttk.Frame" id="Frame_1">
+        <property name="height">400</property>
+        <property name="takefocus">false</property>
+        <property name="width">800</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="propagate">True</property>
+          <property name="row">0</property>
+          <property name="sticky">nw</property>
+        </layout>
+        <child>
+          <object class="ttk.Button" id="Button_submit">
+            <property name="command">showVideo</property>
+            <property name="cursor">hand2</property>
+            <property name="default">normal</property>
+            <property name="text" translatable="yes">Submit</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="padx">10</property>
+              <property name="propagate">True</property>
+              <property name="row">17</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Radiobutton" id="Radiobutton_red">
+            <property name="command">thresholdRed</property>
+            <property name="cursor">hand2</property>
+            <property name="text" translatable="yes">Red</property>
+            <property name="value">red</property>
+            <property name="variable">string:radioVarColor</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="padx">10</property>
+              <property name="propagate">True</property>
+              <property name="row">13</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Radiobutton" id="Radiobutton_green">
+            <property name="command">thresholdGreen</property>
+            <property name="cursor">hand2</property>
+            <property name="text" translatable="yes">Green</property>
+            <property name="value">green</property>
+            <property name="variable">string:radioVarColor</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="padx">10</property>
+              <property name="propagate">True</property>
+              <property name="row">14</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Radiobutton" id="Radiobutton_yellow">
+            <property name="command">thresholdYellow</property>
+            <property name="cursor">hand2</property>
+            <property name="text" translatable="yes">Yellow</property>
+            <property name="value">yellow</property>
+            <property name="variable">string:radioVarColor</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="padx">10</property>
+              <property name="propagate">True</property>
+              <property name="row">15</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Radiobutton" id="Radiobutton_pink">
+            <property name="command">thresholdPink</property>
+            <property name="cursor">hand2</property>
+            <property name="text" translatable="yes">Pink</property>
+            <property name="value">pink</property>
+            <property name="variable">string:radioVarColor</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="padx">10</property>
+              <property name="propagate">True</property>
+              <property name="row">16</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="tk.Message" id="Message_intro">
+            <property name="anchor">w</property>
+            <property name="font">{Times New Roman} 12 {bold italic}</property>
+            <property name="text" translatable="yes">Please select measuring tool color &amp; Submit it</property>
+            <property name="width">150</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="padx">10</property>
+              <property name="propagate">True</property>
+              <property name="row">12</property>
+              <property name="sticky">w</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="tk.Canvas" id="Canvas_video">
+            <property name="background">#d2d2d2</property>
+            <property name="height">400</property>
+            <property name="highlightbackground">#b0b0b0</property>
+            <property name="width">600</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="columnspan">1</property>
+              <property name="padx">10</property>
+              <property name="pady">10</property>
+              <property name="propagate">True</property>
+              <property name="row">12</property>
+              <property name="rowspan">20</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

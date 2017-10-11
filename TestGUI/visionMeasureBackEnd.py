@@ -1,41 +1,59 @@
+try:
+    import tkinter as tk  # for python 3
+except:
+    import Tkinter as tk  # for python 2
+
+import pygubu
 import numpy as np
 import cv2
 import math
 import sys
 from multiprocessing import Queue
 
-cap = cv2.VideoCapture(1)
-
-upperBoundary = (0,0,0)
-lowerBoundary = (0,0,0)
+upperBoundary = (125, 240, 200)
+lowerBoundary = (110, 200, 100)
 
 q = Queue()
 qSum = 0
 
-def chooseColor():
+def liveVideo():
+    print (upperBoundary)
+    print (lowerBoundary)
+
+    cap = cv2.VideoCapture(0)
+    while(True):
+        # Capture frame-by-frame
+        ret, frame = cap.read()
+        if ret:
+            # cv2.imshow("Original", frame)
+            blobDistance(frame)
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    # When everything done, release the capture
+    cap.release()
+    cv2.destroyAllWindows()
+
+def setRed():
     global upperBoundary, lowerBoundary
-    print ("\n\nColor Presets :\n1 Red\n2 Green\n3 Blue\n4 Yellow\n")
-    color = input("Please enter index of the measuring tool color : ")
-    # define color filter
-    # red mask
-    if "1"==color:
-        upperBoundary = (185, 255, 255)
-        lowerBoundary = (155, 50, 50)
-    # green mask
-    elif "2"==color:
-        upperBoundary = (90, 150, 120)
-        lowerBoundary = (75, 100, 70)
-    # blue mask
-    elif "3"==color:
-        upperBoundary = (125, 240, 200)
-        lowerBoundary = (110, 200, 100)
-    # yellow mask
-    elif "4"==color:
-        upperBoundary = (35, 180, 255)
-        lowerBoundary = (20, 80, 180)
-    else:
-        print ("\n*** Wrong color index selected")
-        sys.exit(0)
+    upperBoundary = (185, 255, 255)
+    lowerBoundary = (155, 50, 50)
+
+def setGreen():
+    global upperBoundary, lowerBoundary
+    upperBoundary = (90, 150, 120)
+    lowerBoundary = (75, 100, 70)
+
+def setYellow():
+    global upperBoundary, lowerBoundary
+    upperBoundary = (35, 180, 255)
+    lowerBoundary = (20, 80, 180)
+
+def setPink():
+    global upperBoundary, lowerBoundary
+    upperBoundary = (125, 240, 200)
+    lowerBoundary = (110, 200, 100)
 
 def getmmDistance(pixel):
     temp = (pixel - 23.051) / 0.9753
@@ -64,7 +82,7 @@ def blobDistance(imgSrc):
     # filtering the list of contours according to contour area
     if len(cntsPre) > 0:
         for i in range(0,len(cntsPre)):
-            print ("AreaPre : ", cv2.contourArea(cntsPre[i]))
+            # print ("AreaPre : ", cv2.contourArea(cntsPre[i]))
             if 20 <= cv2.contourArea(cntsPre[i]) <= 100 :
                 cnts.append(cntsPre[i])
 
@@ -107,23 +125,35 @@ def blobDistance(imgSrc):
 
     imgOrig = cv2.resize(imgOrig, (1350,730))
     cv2.imshow("VisionMeasure", imgOrig)
-    cv2.imshow("Filtered", mask)
+    # cv2.imshow("Filtered", mask)
+
+class Application:
+    def __init__(self, master):
+
+        #1: Create a builder
+        self.builder = builder = pygubu.Builder()
+
+        #2: Load an ui file
+        builder.add_from_file('visionMeasureFrontEnd.ui')
+
+        #3: Create the widget using a master as parent
+        self.mainwindow = builder.get_object('Toplevel_1', master)
+
+        # Configure callbacks
+        callbacks = {
+            'showVideo': liveVideo,
+            'thresholdRed': setRed,
+            'thresholdGreen': setGreen,
+            'thresholdYellow': setYellow,
+            'thresholdPink': setPink
+        }
+        builder.connect_callbacks(callbacks)
+
+        # print (builder.get_variable('radioVarColor'))
 
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Main Process ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+if __name__ == '__main__':
+    root = tk.Tk()
+    app = Application(root)
+    root.mainloop()
 
-chooseColor()
-
-while(True):
-    # Capture frame-by-frame
-    ret, frame = cap.read()
-    if ret:
-        # cv2.imshow("Original", frame)
-        blobDistance(frame)
-
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-# When everything done, release the capture
-cap.release()
-cv2.destroyAllWindows()
