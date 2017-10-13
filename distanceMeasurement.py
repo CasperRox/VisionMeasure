@@ -38,7 +38,7 @@ def chooseColor():
         sys.exit(0)
 
 def getmmDistance(pixel):
-    temp = (pixel - 23.051) / 0.9753
+    temp = ((pixel - 23.051) / 0.9753)-1
     if temp > 0:
         return temp
     else:
