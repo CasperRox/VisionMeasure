@@ -4,7 +4,7 @@ import math
 import sys
 from multiprocessing import Queue
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 upperBoundary = (0,0,0)
 lowerBoundary = (0,0,0)
@@ -75,7 +75,7 @@ def blobDistance(imgSrc):
     imgTemp = imgOrig.copy()
     cv2.rectangle(imgTemp,(0,0),(imgTemp.shape[1],100),(0,0,0),-1)
     cv2.addWeighted(imgTemp,0.5,imgOrig,0.5,0,imgOrig)
-    cv2.putText(imgOrig, "Press 'q' to Exit", (490,20), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (255,255,255), 1, cv2.LINE_AA)
+    cv2.putText(imgOrig, "Press 'q' or 'Ctrl+C' to Exit", (390,20), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (255,255,255), 1, cv2.LINE_AA)
 
     # only proceed if two contours were found
     if len(cnts) > 1:
