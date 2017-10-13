@@ -2,9 +2,9 @@ missing module named pyimod03_importers - imported by c:\python36\lib\site-packa
 missing module named 'com.sun' - imported by pkg_resources._vendor.appdirs
 missing module named com - imported by pkg_resources._vendor.appdirs
 missing module named 'win32com.gen_py' - imported by win32com, c:\python36\lib\site-packages\PyInstaller\loader\rthooks\pyi_rth_win32comgenpy.py
-missing module named 'pkg_resources.extern.pyparsing' - imported by pkg_resources._vendor.packaging.markers, pkg_resources._vendor.packaging.requirements
 missing module named __builtin__ - imported by numpy.core.numerictypes, numpy.core.numeric, numpy.distutils.misc_util, numpy.lib.function_base, numpy.lib._iotools, numpy.ma.core, numpy, pkg_resources._vendor.pyparsing
 missing module named ordereddict - imported by pkg_resources._vendor.pyparsing
+missing module named 'pkg_resources.extern.pyparsing' - imported by pkg_resources._vendor.packaging.markers, pkg_resources._vendor.packaging.requirements
 missing module named StringIO - imported by numpy.lib.utils, numpy.testing.utils, numpy.lib.format, pkg_resources._vendor.six
 missing module named __main__ - imported by pkg_resources
 missing module named pkg_resources.extern.packaging - imported by pkg_resources.extern, pkg_resources, setuptools.dist, setuptools.command.egg_info
@@ -33,9 +33,9 @@ missing module named vms_lib - imported by platform, E:\VisionMeasure\distanceMe
 missing module named termios - imported by tty, getpass, E:\VisionMeasure\distanceMeasurement.py
 missing module named urllib.splittag - imported by urllib, setuptools.py26compat
 missing module named grp - imported by shutil, tarfile, pathlib, distutils.archive_util, E:\VisionMeasure\distanceMeasurement.py
-missing module named 'org.python' - imported by copy, setuptools.sandbox, E:\VisionMeasure\distanceMeasurement.py, xml.sax
 missing module named pwd - imported by posixpath, shutil, tarfile, http.server, webbrowser, pathlib, distutils.util, distutils.archive_util, netrc, getpass, E:\VisionMeasure\distanceMeasurement.py
 missing module named _dummy_threading - imported by dummy_threading, E:\VisionMeasure\distanceMeasurement.py
+missing module named 'org.python' - imported by copy, setuptools.sandbox, E:\VisionMeasure\distanceMeasurement.py, xml.sax
 missing module named multiprocessing.Queue - imported by multiprocessing, E:\VisionMeasure\distanceMeasurement.py
 missing module named multiprocessing.SimpleQueue - imported by multiprocessing, concurrent.futures.process
 missing module named commands - imported by numpy.distutils.cpuinfo
@@ -69,9 +69,9 @@ missing module named cPickle - imported by numpy.core.numeric, numpy.lib.format,
 missing module named cStringIO - imported by cPickle
 missing module named copy_reg - imported by cPickle, cStringIO, numpy.core
 missing module named numpy.core.number - imported by numpy.core, numpy.testing.utils
-missing module named numpy.lib.real - imported by numpy.lib, numpy.testing.utils
 missing module named numpy.lib.imag - imported by numpy.lib, numpy.testing.utils
 missing module named numpy.lib.iscomplexobj - imported by numpy.lib, numpy.testing.utils
+missing module named numpy.lib.real - imported by numpy.lib, numpy.testing.utils
 missing module named numpy.core.signbit - imported by numpy.core, numpy.testing.utils
 missing module named numpy.core.float64 - imported by numpy.core, numpy.testing.utils
 missing module named numpy.core.isinf - imported by numpy.core, numpy.testing.utils
@@ -85,29 +85,29 @@ missing module named numpy.core.integer - imported by numpy.core, numpy.fft.help
 missing module named numpy.core.conjugate - imported by numpy.core, numpy.fft.fftpack
 missing module named numpy.core.sqrt - imported by numpy.core, numpy.linalg.linalg, numpy.fft.fftpack
 missing module named numpy.lib.triu - imported by numpy.lib, numpy.linalg.linalg
+missing module named numpy.core.multiply - imported by numpy.core, numpy.linalg.linalg
+missing module named numpy.core.longdouble - imported by numpy.core, numpy.linalg.linalg
+missing module named numpy.core.csingle - imported by numpy.core, numpy.linalg.linalg
+missing module named numpy.core.single - imported by numpy.core, numpy.linalg.linalg
 missing module named numpy.core.double - imported by numpy.core, numpy.linalg.linalg
 missing module named numpy.core.object_ - imported by numpy.core, numpy.linalg.linalg
-missing module named numpy.core.intp - imported by numpy.core, numpy.linalg.linalg
-missing module named numpy.core.longdouble - imported by numpy.core, numpy.linalg.linalg
-missing module named numpy.core.maximum - imported by numpy.core, numpy.linalg.linalg
-missing module named numpy.core.multiply - imported by numpy.core, numpy.linalg.linalg
-missing module named numpy.core.csingle - imported by numpy.core, numpy.linalg.linalg
-missing module named numpy.core.geterrobj - imported by numpy.core, numpy.linalg.linalg
-missing module named numpy.core.inexact - imported by numpy.core, numpy.linalg.linalg
-missing module named numpy.core.single - imported by numpy.core, numpy.linalg.linalg
-missing module named numpy.core.complexfloating - imported by numpy.core, numpy.linalg.linalg
-missing module named numpy.core.add - imported by numpy.core, numpy.linalg.linalg
 missing module named numpy.core.cdouble - imported by numpy.core, numpy.linalg.linalg
+missing module named numpy.core.add - imported by numpy.core, numpy.linalg.linalg
+missing module named numpy.core.inexact - imported by numpy.core, numpy.linalg.linalg
+missing module named numpy.core.geterrobj - imported by numpy.core, numpy.linalg.linalg
+missing module named numpy.core.intp - imported by numpy.core, numpy.linalg.linalg
+missing module named numpy.core.maximum - imported by numpy.core, numpy.linalg.linalg
+missing module named numpy.core.complexfloating - imported by numpy.core, numpy.linalg.linalg
 missing module named future_builtins - imported by numpy.lib.npyio
 missing module named urlparse - imported by numpy.lib._datasource
 missing module named numpy.recarray - imported by numpy, numpy.ma.mrecords
 missing module named numpy.dtype - imported by numpy, numpy.ma.mrecords, numpy.ctypeslib
 missing module named numpy.expand_dims - imported by numpy, numpy.ma.core
 missing module named numpy.array - imported by numpy, numpy.ma.core, numpy.ma.extras, numpy.ma.mrecords, numpy.ctypeslib
+missing module named numpy.iscomplexobj - imported by numpy, numpy.ma.core
+missing module named numpy.amax - imported by numpy, numpy.ma.core
 missing module named numpy.bool_ - imported by numpy, numpy.ma.core, numpy.ma.mrecords
 missing module named numpy.amin - imported by numpy, numpy.ma.core
-missing module named numpy.amax - imported by numpy, numpy.ma.core
-missing module named numpy.iscomplexobj - imported by numpy, numpy.ma.core
 missing module named numpy.ndarray - imported by numpy, numpy.ma.core, numpy.ma.extras, numpy.ma.mrecords, numpy.ctypeslib
 missing module named numpy.histogramdd - imported by numpy, numpy.lib.twodim_base
 missing module named numpy.eye - imported by numpy, numpy.core.numeric
