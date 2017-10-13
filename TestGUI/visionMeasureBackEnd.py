@@ -56,7 +56,7 @@ def setPink():
     lowerBoundary = (110, 200, 100)
 
 def getmmDistance(pixel):
-    temp = (pixel - 23.051) / 0.9753
+    temp = ((pixel - 23.051) / 0.9753)-1
     if temp > 0:
         return temp
     else:
@@ -93,6 +93,7 @@ def blobDistance(imgSrc):
     imgTemp = imgOrig.copy()
     cv2.rectangle(imgTemp,(0,0),(imgTemp.shape[1],100),(0,0,0),-1)
     cv2.addWeighted(imgTemp,0.5,imgOrig,0.5,0,imgOrig)
+    cv2.putText(imgOrig, "Press 'q' to Exit", (490,20), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (255,255,255), 1, cv2.LINE_AA)
 
     # only proceed if two contours were found
     if len(cnts) > 1:
@@ -152,7 +153,7 @@ class Application:
 
 if __name__ == '__main__':
     root = tk.Tk()
-    root.withdraw()
+    # root.withdraw()
     app = Application(root)
     root.mainloop()
 
