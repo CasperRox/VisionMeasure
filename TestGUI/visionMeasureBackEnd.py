@@ -149,11 +149,10 @@ class Application:
         }
         builder.connect_callbacks(callbacks)
 
-        # print (builder.get_variable('radioVarColor'))
-
 
 if __name__ == '__main__':
     root = tk.Tk()
+    root.withdraw()
     app = Application(root)
     root.mainloop()
 
