@@ -27,8 +27,8 @@ def chooseColor():
         lowerBoundary = (75, 100, 70)
     # pink mask
     elif "3"==color:
-        upperBoundary = (175, 255, 255)
-        lowerBoundary = (150, 100, 50)
+        upperBoundary = (150, 200, 200)
+        lowerBoundary = (110, 0, 80)
     # yellow mask
     elif "4"==color:
         upperBoundary = (35, 180, 255)
@@ -38,7 +38,7 @@ def chooseColor():
         sys.exit(0)
 
 def getmmDistance(pixel):
-    temp = ((pixel - 23.051) / 0.9753)-2
+    temp = ((pixel - 15.694) / 0.7056)
     if temp > 0:
         return temp
     else:
@@ -64,8 +64,8 @@ def blobDistance(imgSrc):
     # filtering the list of contours according to contour area
     if len(cntsPre) > 0:
         for i in range(0,len(cntsPre)):
-            # print ("AreaPre : ", cv2.contourArea(cntsPre[i]))
-            if 100 <= cv2.contourArea(cntsPre[i]) <= 250 :
+            print ("AreaPre : ", cv2.contourArea(cntsPre[i]))
+            if 20 <= cv2.contourArea(cntsPre[i]) <= 150 :
                 cnts.append(cntsPre[i])
 
     cnts = sorted(cnts, key = cv2.contourArea, reverse = True)[:2]
@@ -108,7 +108,7 @@ def blobDistance(imgSrc):
 
     imgOrig = cv2.resize(imgOrig, (1350,730))
     cv2.imshow("VisionMeasure", imgOrig)
-    # cv2.imshow("Filtered", mask)
+    cv2.imshow("Filtered", mask)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Main Process ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
