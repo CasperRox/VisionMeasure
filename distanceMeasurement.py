@@ -64,7 +64,7 @@ def blobDistance(imgSrc):
     # filtering the list of contours according to contour area
     if len(cntsPre) > 0:
         for i in range(0,len(cntsPre)):
-            print ("AreaPre : ", cv2.contourArea(cntsPre[i]))
+            # print ("AreaPre : ", cv2.contourArea(cntsPre[i]))
             if 20 <= cv2.contourArea(cntsPre[i]) <= 150 :
                 cnts.append(cntsPre[i])
 
@@ -108,7 +108,7 @@ def blobDistance(imgSrc):
 
     imgOrig = cv2.resize(imgOrig, (1350,730))
     cv2.imshow("VisionMeasure", imgOrig)
-    cv2.imshow("Filtered", mask)
+    # cv2.imshow("Filtered", mask)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Main Process ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
