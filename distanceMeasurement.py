@@ -5,6 +5,7 @@ import sys
 from multiprocessing import Queue
 
 cap = cv2.VideoCapture(1)
+cap.set(cv2.CAP_PROP_EXPOSURE, -6)
 
 upperBoundary = (0,0,0)
 lowerBoundary = (0,0,0)
