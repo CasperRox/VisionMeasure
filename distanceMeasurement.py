@@ -4,7 +4,7 @@ import math
 import sys
 from multiprocessing import Queue
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 cap.set(cv2.CAP_PROP_EXPOSURE, -6)
 cap.set(cv2.CAP_PROP_SETTINGS, 1)
 
