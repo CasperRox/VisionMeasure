@@ -110,7 +110,7 @@ def blobDistance(imgSrc):
 
     imgOrig = cv2.resize(imgOrig, (1350,730))
     cv2.imshow("VisionMeasure", imgOrig)
-    cv2.imshow("Filtered", mask)
+    # cv2.imshow("Filtered", mask)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Main Process ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
