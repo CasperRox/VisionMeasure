@@ -73,7 +73,7 @@ def blobDistance(imgSrc):
     cnts = sorted(cnts, key = cv2.contourArea, reverse = True)[:2]
     center = [(0,0),(0,0)]
 
-    # Draw a rectangle on the image frame
+    # Draw a rectangle on the image frame to display text
     imgTemp = imgOrig.copy()
     cv2.rectangle(imgTemp,(0,0),(imgTemp.shape[1],100),(0,0,0),-1)
     cv2.addWeighted(imgTemp,0.5,imgOrig,0.5,0,imgOrig)

@@ -27,39 +27,45 @@ def removeBackground1():
 
 
 def removeBackground2():
-	initial = cv2.imread("E:\ImageProcessing\Testings\img1.jpg")
-	initial = cv2.resize(initial, (640, 480))
-	# initial = cv2.cvtColor(initial, cv2.COLOR_BGR2GRAY)
-	current = cv2.imread("E:\ImageProcessing\Testings\img2.jpg")
-	current = cv2.resize(current, (640, 480))
-	# current = cv2.cvtColor(current, cv2.COLOR_BGR2GRAY)
-	# foreground = initial - current
-	# cv2.imshow("Test", foreground)
-	cv2.imshow("Test", current)
-	cv2.waitKey(10000)
-	# cap = cv2.VideoCapture(0)
-	## cap.set(cv2.CAP_PROP_SETTINGS, 1)
+	cap = cv2.VideoCapture(0)
+	# cap.set(cv2.CAP_PROP_SETTINGS, 1)
 	# ret, frame = cap.read()
 	# if ret:
 	# 	# initial = frame
 	# 	initial = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+	original = cv2.imread("E:\MachineLearning\Images\TShirt\img70.jpg")
 
+	while(True):
+		# Capture frame-by-frame
+		ret, frame = cap.read()
+		if ret:
+			frame = original.copy()			# Process a saved image
+			backup = frame.copy()			# An unedited copy of initial image
+			# cv2.imshow("Original", backup)
+			current = cv2.cvtColor(frame.copy(), cv2.COLOR_BGR2GRAY)			# Convert image into grayscale
+			median = cv2.medianBlur(current,21)									# Median filtering(second parameter can only be an odd number)
+			cv2.imshow("Test1", median)
+			thresh = 200
+			binary = cv2.threshold(median, thresh, 255, cv2.THRESH_BINARY_INV)[1]			# Convert image into black & white
+			# binary = cv2.Canny(median, 30, 150)			# Edge detection(2nd & 3rd parameters are minVal & maxVal, 
+															# below min - not edge, above max - sure edge, between - only is connected with sure edge)
+			# kernel = np.ones((5,5),np.uint8)
+			# binary = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel)	# dilation then erosion
+			binary = cv2.dilate(binary, None, iterations=2)			# Dilation - make bigger white area
+			binary = cv2.erode(binary, None, iterations=2)			# Erosion - make smaller white area
+			cv2.imshow("Test2", binary)
+			cnts = cv2.findContours(binary.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]	# Contour tracking()
+			cnts = sorted(cnts, key = cv2.contourArea, reverse = True)[:2]							# Sort contours area wise from bigger to smaller
+			cv2.drawContours(frame, cnts, -1, (0,255,0), 3)				# Draw boundary for contours
 
-	# while(True):
-	# 	# Capture frame-by-frame
-	# 	ret, frame = cap.read()
-	# 	if ret:
-	# 		cv2.imshow("Original", frame)
-	# 		frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-	# 		foreground = frame - initial
-	# 		cv2.imshow("Processed", foreground)
+			cv2.imshow("Processed", frame)
 
-	# 	if cv2.waitKey(1) & 0xFF == ord('q'):
-	# 		break
+		if cv2.waitKey(1) & 0xFF == ord('q'):
+			break
 
-	# # When everything done, release the capture
-	# cap.release()
-	# cv2.destroyAllWindows()
+	# When everything done, release the capture
+	cap.release()
+	cv2.destroyAllWindows()
 
 
 def click_and_crop(event, x, y, flags, param):
