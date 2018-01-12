@@ -34,13 +34,16 @@ def removeBackground2():
 	# 	# initial = frame
 	# 	initial = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	original = cv2.imread("E:\MachineLearning\Images\TShirt\img2890.jpg")
+	# (height,width) = original.shape[:2]
+	# rotation_matrix1 = cv2.getRotationMatrix2D((width/2, height/2), 180, 1)			# Rotation matrix ((centerOfRotation), Anti-ClockwiseRotationAngle, Scale)
+	# original = cv2.warpAffine(original, rotation_matrix1, (width,height))				# Rotate filtered image (Image, RotationMatrix, NewImageDimensions)
 
 	while(True):
 		# Capture frame-by-frame
 		ret, frame = cap.read()
 		if ret:
 			# print("New frame")
-			# frame = original.copy()			# Process a saved image instead of live video
+			frame = original.copy()			# Process a saved image instead of live video
 			backup = frame.copy()			# An unedited copy of initial image
 			# cv2.imshow("Original", backup)
 			gray = cv2.cvtColor(frame.copy(), cv2.COLOR_BGR2GRAY)				# Convert image into grayscale
@@ -76,16 +79,23 @@ def removeBackground2():
 
 			rotation_matrix = cv2.getRotationMatrix2D(ellipse[0], (ellipse[2]-90), 1)			# Rotation matrix ((centerOfRotation), Anti-ClockwiseRotationAngle, Scale)
 			# rotation_matrix = cv2.getRotationMatrix2D((int(ellipse[0][0]),int(ellipse[0][1])), (int(ellipse[2])-90), 1)
-			rotated_mask = cv2.warpAffine(mask, rotation_matrix, (640, 640))				# Rotate filtered image (Image, RotationMatrix, NewImageDimensions)
-			rotated_frame = cv2.warpAffine(frame, rotation_matrix, (640, 640))				# Rotate actual image
+			rotated_mask = cv2.warpAffine(mask, rotation_matrix, (mask.shape[1],mask.shape[0]))				# Rotate filtered image (Image, RotationMatrix, NewImageDimensions)
+			# rotated_mask = cv2.warpAffine(mask, rotation_matrix, (640, 640))				# Rotate filtered image (Image, RotationMatrix, NewImageDimensions)
+			rotated_frame = cv2.warpAffine(frame, rotation_matrix, (frame.shape[1],frame.shape[0]))				# Rotate actual image
+			# rotated_frame = cv2.warpAffine(frame, rotation_matrix, (640, 640))				# Rotate actual image
 			cv2.imshow("Test4", rotated_mask)
 
+			# *************************************************************
+			# *************************************************************
+			# *************************************************************
+			# *************************************************************
+			# *************************************************************
 			height_array_y = int(ellipse[0][1])
 			# print(rotated_mask[height_array_y])
 			white = False
 			first = 0
 			last = 0
-			for i in range(0,len(rotated_mask[height_array_y])):
+			for i in range(0,len(rotated_mask[height_array_y])):				# Calculate pixel height by checking pixel value
 				if white == False and rotated_mask[height_array_y][i] != 0:
 					first = i
 					white = True
@@ -93,10 +103,177 @@ def removeBackground2():
 					last = i-1
 					white = False
 			pixel_height = last - first
-			print(pixel_height)
-			cv2.line(rotated_frame, (first,height_array_y), (last,height_array_y), (255,0,0), 3)
+			print("pixelHeight = %d" %pixel_height)
+			cv2.line(rotated_frame, (first,height_array_y), (last,height_array_y), (255,0,0), 3)			# Draw height calculating line on image
 			font = cv2.FONT_HERSHEY_SCRIPT_COMPLEX
-			cv2.putText(rotated_frame, '%.1f pixel' %pixel_height, (10,80), font, 1, (255,0,0), 2, cv2.LINE_AA)
+			cv2.putText(rotated_frame, '%.1f pixel' %pixel_height, (first,height_array_y-10), font, 1, (255,0,0), 2, cv2.LINE_AA)			# Display height value on image
+
+
+
+			mid_width_array_x = int(ellipse[0][0])
+			sleeve_check_length = int(pixel_height * 27 /100)
+			cv2.line(rotated_frame, (mid_width_array_x,0), (mid_width_array_x,480), (255,0,0), 3)			# Draw height calculating line on image
+			cv2.line(rotated_frame, (mid_width_array_x-sleeve_check_length,0), (mid_width_array_x-sleeve_check_length,480), (255,255,0), 3)			# Draw height calculating line on image
+			cv2.line(rotated_frame, (mid_width_array_x+sleeve_check_length,0), (mid_width_array_x+sleeve_check_length,480), (255,255,0), 3)			# Draw height calculating line on image
+
+
+			# *************************************************************
+			# *************************************************************
+			# *************************************************************
+			# *************************************************************
+			# *************************************************************
+			transpose_rotated_mask = np.transpose(rotated_mask)
+			sleeve_check_temp1_count = np.count_nonzero(transpose_rotated_mask[mid_width_array_x-sleeve_check_length])
+			sleeve_check_temp2_count = np.count_nonzero(transpose_rotated_mask[mid_width_array_x+sleeve_check_length])
+			sleeve_side = 0
+			non_sleeve_side = 0
+			rotated = False
+			if sleeve_check_temp1_count > sleeve_check_temp2_count:
+				sleeve_side = mid_width_array_x-sleeve_check_length
+				non_sleeve_side = mid_width_array_x+sleeve_check_length
+				rotated = False
+			else:
+				sleeve_side = mid_width_array_x+sleeve_check_length
+				non_sleeve_side = mid_width_array_x-sleeve_check_length
+				rotated = True
+
+
+			body_sweap_x = 0
+			temp_width_pre = np.count_nonzero(transpose_rotated_mask[non_sleeve_side])
+			step = 5
+			while True:
+				if rotated == False:
+					non_sleeve_side += step
+					temp_count = np.count_nonzero(transpose_rotated_mask[non_sleeve_side])
+					if temp_count < temp_width_pre:
+						temp_count2 = np.count_nonzero(transpose_rotated_mask[non_sleeve_side+step])
+						if temp_count2 < temp_count:
+							body_sweap_x = non_sleeve_side-step
+							break
+					else:
+						temp_width_pre = temp_count
+				else:
+					non_sleeve_side -= step
+					temp_count = np.count_nonzero(transpose_rotated_mask[non_sleeve_side])
+					if temp_count < temp_width_pre:
+						temp_count2 = np.count_nonzero(transpose_rotated_mask[non_sleeve_side-step])
+						if temp_count2 < temp_count:
+							body_sweap_x = non_sleeve_side+step
+							break
+					else:
+						temp_width_pre = temp_count
+			white = False
+			first = 0
+			last = 0
+			for i in range(0,len(transpose_rotated_mask[body_sweap_x])):				# Calculate pixel body sweap by checking pixel value
+				if white == False and transpose_rotated_mask[body_sweap_x][i] != 0:
+					first = i
+					white = True
+				elif white == True and transpose_rotated_mask[body_sweap_x][i] == 0:
+					last = i-1
+					white = False
+			pixel_body_sweap = last - first
+			print("pixelBodySweap = %d" %pixel_body_sweap)
+			cv2.line(rotated_frame, (body_sweap_x,first), (body_sweap_x,last), (255,0,0), 3)			# Draw height calculating line on image
+			font = cv2.FONT_HERSHEY_SCRIPT_COMPLEX
+			cv2.putText(rotated_frame, '%.1f pixel' %pixel_body_sweap, (body_sweap_x-100,first-10), font, 1, (255,0,0), 2, cv2.LINE_AA)			# Display height value on image
+
+
+
+
+			body_width_x = 0
+			temp_width_pre = np.count_nonzero(transpose_rotated_mask[mid_width_array_x])
+			sleeve_check = mid_width_array_x
+			step = 5
+			continuous_white_counts = []
+			max_index = 0
+			first = []
+			last = []
+			while True:
+				if rotated == False:
+					sleeve_check -= step
+					white = False
+					continuous_white = 0
+					continuous_white_counts = []
+					for i in range(0,len(transpose_rotated_mask[sleeve_check])):				# Calculate cintinuous white by checking pixel value
+						if white == False and transpose_rotated_mask[sleeve_check][i] != 0:
+							first.append(i)
+							continuous_white = 1
+							# continuous_white += 1
+							white = True
+						elif white == True and transpose_rotated_mask[sleeve_check][i] != 0:
+							continuous_white += 1
+							white = True
+						elif white == True and transpose_rotated_mask[sleeve_check][i] == 0:
+							continuous_white_counts.append(continuous_white)
+							last.append(i)
+							white = False
+					# continuous_white_counts = sorted(continuous_white_counts, reverse=True)
+					# cnts = sorted(cnts, key = cv2.contourArea, reverse = True)[:1]							# Sort contours area wise from bigger to smaller
+					max_index = np.argmax(continuous_white_counts)
+					temp_count = continuous_white_counts[max_index]
+					if temp_count > temp_width_pre+20:
+						body_width_x = sleeve_check+step
+						break
+					# if temp_count < temp_width_pre:
+					# 	temp_count2 = np.count_nonzero(transpose_rotated_mask[non_sleeve_side+step])
+					# 	if temp_count2 < temp_count:
+					# 		body_sweap_x = non_sleeve_side-step
+					# 		break
+					else:
+						temp_width_pre = temp_count
+				else:
+					sleeve_check += step
+					white = False
+					continuous_white = 0
+					continuous_white_counts = []
+					for i in range(0,len(transpose_rotated_mask[sleeve_check])):				# Calculate cintinuous white by checking pixel value
+						if white == False and transpose_rotated_mask[sleeve_check][i] != 0:
+							first.append(i)
+							continuous_white = 1
+							# continuous_white += 1
+							white = True
+						elif white == True and transpose_rotated_mask[sleeve_check][i] != 0:
+							continuous_white += 1
+							white = True
+						elif white == True and transpose_rotated_mask[sleeve_check][i] == 0:
+							continuous_white_counts.append(continuous_white)
+							last.append(i)
+							white = False
+					# continuous_white_counts = sorted(continuous_white_counts, reverse=True)
+					# cnts = sorted(cnts, key = cv2.contourArea, reverse = True)[:1]							# Sort contours area wise from bigger to smaller
+					max_index = np.argmax(continuous_white_counts)
+					temp_count = continuous_white_counts[max_index]
+					if temp_count > temp_width_pre+20:
+						body_width_x = sleeve_check-step
+						break
+					else:
+						temp_width_pre = temp_count
+			pixel_body_width = continuous_white_counts[max_index]
+			pixel_body_width2 = last[max_index] - first[max_index]
+			# white = False
+			# first = 0
+			# last = 0
+			# for i in range(0,len(transpose_rotated_mask[body_sweap_x])):				# Calculate pixel body sweap by checking pixel value
+			# 	if white == False and transpose_rotated_mask[body_sweap_x][i] != 0:
+			# 		first = i
+			# 		white = True
+			# 	elif white == True and transpose_rotated_mask[body_sweap_x][i] == 0:
+			# 		last = i-1
+			# 		white = False
+			# pixel_body_sweap = last - first
+			print("pixelBodyWidth = %d" %pixel_body_width)
+			cv2.line(rotated_frame, (body_width_x,first[max_index]), (body_width_x,last[max_index]), (255,0,0), 3)			# Draw height calculating line on image
+			font = cv2.FONT_HERSHEY_SCRIPT_COMPLEX
+			cv2.putText(rotated_frame, '%.1f pixel' %pixel_body_width, (body_width_x-100,first-10), font, 1, (255,0,0), 2, cv2.LINE_AA)			# Display height value on image
+
+
+
+
+			print(np.count_nonzero(rotated_mask[height_array_y]))
+			print(np.count_nonzero(np.transpose(rotated_mask)[mid_width_array_x-sleeve_check_length]))
+			print(np.count_nonzero(np.transpose(rotated_mask)[mid_width_array_x+sleeve_check_length]))
+
 			cv2.imshow("Test5", rotated_frame)
 
 			cv2.imshow("Processed", frame)
