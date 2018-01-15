@@ -138,6 +138,9 @@ def removeBackground2():
 				rotated = True
 
 
+
+
+
 			body_sweap_x = 0
 			temp_width_pre = np.count_nonzero(transpose_rotated_mask[non_sleeve_side])
 			step = 5
@@ -181,16 +184,27 @@ def removeBackground2():
 
 
 
+			# *************************************************************
+			# *************************************************************
+			# *************************************************************
+			# *************************************************************
+			# *************************************************************
 			body_width_x = 0
 			temp_width_pre = np.count_nonzero(transpose_rotated_mask[mid_width_array_x])
 			sleeve_check = mid_width_array_x
 			step = 5
+			body_width_x_dif = int(33/step)
+			body_width_first = []
+			body_width_last = []
+			count_for_dif = 0
+			dif = 5
 			continuous_white_counts = []
 			max_index = 0
 			first = []
 			last = []
 			while True:
 				if rotated == False:
+					count_for_dif += 1
 					sleeve_check -= step
 					white = False
 					continuous_white = 0
@@ -206,13 +220,23 @@ def removeBackground2():
 							white = True
 						elif white == True and transpose_rotated_mask[sleeve_check][i] == 0:
 							continuous_white_counts.append(continuous_white)
+							print("list %d" %i)
+							print("white %d" %continuous_white)
 							last.append(i)
 							white = False
 					# continuous_white_counts = sorted(continuous_white_counts, reverse=True)
 					# cnts = sorted(cnts, key = cv2.contourArea, reverse = True)[:1]							# Sort contours area wise from bigger to smaller
+					print("list size %d" %len(continuous_white_counts))
 					max_index = np.argmax(continuous_white_counts)
+					print("max %d" %max_index)
+					if count_for_dif - body_width_x_dif > 0:
+						body_width_first.append(first[max_index])
+						body_width_last.append(last[max_index])
+						print("for actual width %d" %len(body_width_first))
 					temp_count = continuous_white_counts[max_index]
-					if temp_count > temp_width_pre+20:
+					print("***** count %d" %temp_count)
+					print("pre %d" %temp_width_pre)
+					if temp_count > temp_width_pre+dif:
 						body_width_x = sleeve_check+step
 						break
 					# if temp_count < temp_width_pre:
@@ -223,6 +247,7 @@ def removeBackground2():
 					else:
 						temp_width_pre = temp_count
 				else:
+					count_for_dif += 1
 					sleeve_check += step
 					white = False
 					continuous_white = 0
@@ -243,8 +268,11 @@ def removeBackground2():
 					# continuous_white_counts = sorted(continuous_white_counts, reverse=True)
 					# cnts = sorted(cnts, key = cv2.contourArea, reverse = True)[:1]							# Sort contours area wise from bigger to smaller
 					max_index = np.argmax(continuous_white_counts)
+					if count_for_dif - body_width_x_dif > 0:
+						body_width_first.append(first[max_index])
+						body_width_last.append(last[max_index])
 					temp_count = continuous_white_counts[max_index]
-					if temp_count > temp_width_pre+20:
+					if temp_count > temp_width_pre+dif:
 						body_width_x = sleeve_check-step
 						break
 					else:
@@ -262,10 +290,20 @@ def removeBackground2():
 			# 		last = i-1
 			# 		white = False
 			# pixel_body_sweap = last - first
-			print("pixelBodyWidth = %d" %pixel_body_width)
-			cv2.line(rotated_frame, (body_width_x,first[max_index]), (body_width_x,last[max_index]), (255,0,0), 3)			# Draw height calculating line on image
+
+			# print("pixelBodyWidth = %d" %pixel_body_width)
+			# cv2.line(rotated_frame, (body_width_x,first[max_index]), (body_width_x,last[max_index]), (255,0,0), 3)			# Draw height calculating line on image
+			# font = cv2.FONT_HERSHEY_SCRIPT_COMPLEX
+			# cv2.putText(rotated_frame, '%.1f pixel' %pixel_body_width, (body_width_x-100,first[max_index]-10), font, 1, (255,0,0), 2, cv2.LINE_AA)			# Display height value on image
+
+			pixel_body_width_actual = body_width_last[len(body_width_last)-1] - body_width_first[len(body_width_first)-1]
+			print("pixelBodyWidthActual = %d" %pixel_body_width_actual)
+			if rotated == False:
+				cv2.line(rotated_frame, ((body_width_x + body_width_x_dif),body_width_first[len(body_width_first)-1]), ((body_width_x + body_width_x_dif),body_width_last[len(body_width_last)-1]), (255,0,0), 3)			# Draw height calculating line on image
+			else:
+				cv2.line(rotated_frame, ((body_width_x - body_width_x_dif),body_width_first[len(body_width_first)-1]), ((body_width_x - body_width_x_dif),body_width_last[len(body_width_last)-1]), (255,0,0), 3)			# Draw height calculating line on image
 			font = cv2.FONT_HERSHEY_SCRIPT_COMPLEX
-			cv2.putText(rotated_frame, '%.1f pixel' %pixel_body_width, (body_width_x-100,first-10), font, 1, (255,0,0), 2, cv2.LINE_AA)			# Display height value on image
+			cv2.putText(rotated_frame, '%.1f pixel' %pixel_body_width_actual, (body_width_x-150,body_width_first[len(body_width_first)-1]-10), font, 1, (255,0,0), 2, cv2.LINE_AA)			# Display height value on image
 
 
 
