@@ -318,7 +318,7 @@ def removeBackground2():
 			rotation_matrix = cv2.getRotationMatrix2D(ellipse[0], (360-(ellipse[2]-90)), 1)			# Rotation matrix ((centerOfRotation), Anti-ClockwiseRotationAngle, Scale)
 			rotated_frame = cv2.warpAffine(rotated_frame, rotation_matrix, (frame.shape[1],frame.shape[0]))				# Rotate actual image
 
-			# rotated_frame = cv2.resize(rotated_frame, (960,720))
+			rotated_frame = cv2.resize(rotated_frame, (960,720))
 			cv2.imshow("Test5", rotated_frame)
 
 			# cv2.imshow("Processed", frame)
