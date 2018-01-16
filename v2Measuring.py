@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import math
 
 refPt = []			# to store cropping rectangle cordinates
 cropping = False	# check point for cropping
@@ -69,25 +70,27 @@ def removeBackground2():
 			cv2.imshow("Test3", mask)
 
 			ellipse = cv2.fitEllipse(cnts[0])				# [ellipse] = [(center), (MajorAxisLength, MinorAxisLength), clockwiseAngleFromXAxisToMajorOrMinorAxis]
-			cv2.ellipse(frame, ellipse, (0,0,255), 3)
+			# cv2.ellipse(frame, ellipse, (0,0,255), 3)
 			print(int(ellipse[0][0]), int(ellipse[0][1]))
 
 			box = cv2.boxPoints(ellipse)			# Take 4 cordinates of enclosing rectangle for the ellipse
 			box = np.int0(box)
-			cv2.drawContours(frame,[box],0,(0,0,255),3)
+			# cv2.drawContours(frame,[box],0,(0,0,255),3)
 			# print(box)
 
+			frame_diagonal = int(math.sqrt(math.pow(frame.shape[0],2) + math.pow(frame.shape[1],2)))
 			rotation_matrix = cv2.getRotationMatrix2D(ellipse[0], (ellipse[2]-90), 1)			# Rotation matrix ((centerOfRotation), Anti-ClockwiseRotationAngle, Scale)
 			# rotation_matrix = cv2.getRotationMatrix2D((int(ellipse[0][0]),int(ellipse[0][1])), (int(ellipse[2])-90), 1)
 			rotated_mask = cv2.warpAffine(mask, rotation_matrix, (mask.shape[1],mask.shape[0]))				# Rotate filtered image (Image, RotationMatrix, NewImageDimensions)
 			# rotated_mask = cv2.warpAffine(mask, rotation_matrix, (640, 640))				# Rotate filtered image (Image, RotationMatrix, NewImageDimensions)
-			rotated_frame = cv2.warpAffine(frame, rotation_matrix, (frame.shape[1],frame.shape[0]))				# Rotate actual image
+			rotated_frame = cv2.warpAffine(frame, rotation_matrix, (frame_diagonal,frame_diagonal))				# Rotate actual image
+			# rotated_frame = cv2.warpAffine(frame, rotation_matrix, (frame.shape[1],frame.shape[0]))				# Rotate actual image
 			# rotated_frame = cv2.warpAffine(frame, rotation_matrix, (640, 640))				# Rotate actual image
 			cv2.imshow("Test4", rotated_mask)
 
 			# *************************************************************
 			# *************************************************************
-			# *************************************************************
+			# ***********************Body Height**************************************
 			# *************************************************************
 			# *************************************************************
 			height_array_y = int(ellipse[0][1])
@@ -112,14 +115,14 @@ def removeBackground2():
 
 			mid_width_array_x = int(ellipse[0][0])
 			sleeve_check_length = int(pixel_height * 27 /100)
-			cv2.line(rotated_frame, (mid_width_array_x,0), (mid_width_array_x,480), (255,0,0), 3)			# Draw height calculating line on image
-			cv2.line(rotated_frame, (mid_width_array_x-sleeve_check_length,0), (mid_width_array_x-sleeve_check_length,480), (255,255,0), 3)			# Draw height calculating line on image
-			cv2.line(rotated_frame, (mid_width_array_x+sleeve_check_length,0), (mid_width_array_x+sleeve_check_length,480), (255,255,0), 3)			# Draw height calculating line on image
+			# cv2.line(rotated_frame, (mid_width_array_x,0), (mid_width_array_x,480), (255,0,0), 3)			# Draw height calculating line on image
+			# cv2.line(rotated_frame, (mid_width_array_x-sleeve_check_length,0), (mid_width_array_x-sleeve_check_length,480), (255,255,0), 3)			# Draw height calculating line on image
+			# cv2.line(rotated_frame, (mid_width_array_x+sleeve_check_length,0), (mid_width_array_x+sleeve_check_length,480), (255,255,0), 3)			# Draw height calculating line on image
 
 
 			# *************************************************************
 			# *************************************************************
-			# *************************************************************
+			# ***********************Body Sweap**************************************
 			# *************************************************************
 			# *************************************************************
 			transpose_rotated_mask = np.transpose(rotated_mask)
@@ -186,7 +189,7 @@ def removeBackground2():
 
 			# *************************************************************
 			# *************************************************************
-			# *************************************************************
+			# *************************Body Width************************************
 			# *************************************************************
 			# *************************************************************
 			body_width_x = 0
@@ -312,9 +315,13 @@ def removeBackground2():
 			print(np.count_nonzero(np.transpose(rotated_mask)[mid_width_array_x-sleeve_check_length]))
 			print(np.count_nonzero(np.transpose(rotated_mask)[mid_width_array_x+sleeve_check_length]))
 
+			rotation_matrix = cv2.getRotationMatrix2D(ellipse[0], (360-(ellipse[2]-90)), 1)			# Rotation matrix ((centerOfRotation), Anti-ClockwiseRotationAngle, Scale)
+			rotated_frame = cv2.warpAffine(rotated_frame, rotation_matrix, (frame.shape[1],frame.shape[0]))				# Rotate actual image
+
+			# rotated_frame = cv2.resize(rotated_frame, (960,720))
 			cv2.imshow("Test5", rotated_frame)
 
-			cv2.imshow("Processed", frame)
+			# cv2.imshow("Processed", frame)
 
 		if cv2.waitKey(1) & 0xFF == ord('q'):
 			break
